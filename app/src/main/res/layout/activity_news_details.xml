@@ -47,8 +47,6 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@id/app_bar"
         app:srcCompat="@android:drawable/ic_menu_share"
-        app:layout_anchorGravity="bottom|center"
+        app:layout_anchorGravity="bottom|end"
         />
-
-
 </android.support.design.widget.CoordinatorLayout>
