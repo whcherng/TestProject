@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.example.hcwong.testproject.Model.Article;
 import com.example.hcwong.testproject.Model.Source;
@@ -152,7 +153,7 @@ public class LocalFragment extends Fragment implements LocalContract.View{
             public void onClick(View view) {
                 if(editTitle.getText().toString().trim().equals("") &&editDescription.getText().toString().trim().equals(""))
                 {
-                    GeneralUtil.toastShort("Empty Title/ Description");
+                    Toast.makeText(mContext,"Empty Title/ Description",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Article tempArticle = new Article();

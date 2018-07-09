@@ -46,6 +46,10 @@ public class ListInteractor {
             Call<News> news=service.listNews("us",WebService.API_KEY);
             try {
                 articles=news.execute().body().getArticles();
+                for(Article article : articles){
+                    if(article.getDescription()==null)
+                        article.setDescription("");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
