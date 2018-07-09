@@ -123,6 +123,7 @@ public class ListFragment extends Fragment implements SearchView.OnQueryTextList
         adapter=new ListAdapter(getContext(),listOfArticles);
         listView.setAdapter(adapter);
 
+        searchView.setSubmitButtonEnabled(false);
         ArrayList<String>categories=new ArrayList<>();
         categories.add("Tittle");
         categories.add("Description");
