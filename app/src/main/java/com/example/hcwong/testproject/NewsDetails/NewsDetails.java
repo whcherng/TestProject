@@ -1,5 +1,6 @@
 package com.example.hcwong.testproject.NewsDetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hcwong.testproject.Main.ListNews.ListContract;
 import com.example.hcwong.testproject.R;
 import com.example.hcwong.testproject.shared.GeneralUtil;
 import com.squareup.picasso.Picasso;
@@ -19,8 +21,10 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsDetails extends AppCompatActivity {
+public class NewsDetails extends AppCompatActivity implements NewsDetailsContract.View {
 
+    private Context mContext;
+    private NewsDetailsContract.Presenter mPresenter;
     @BindView(R.id.imageView)
     ImageView imageView;
     @BindView(R.id.txt_desc)
@@ -30,28 +34,52 @@ public class NewsDetails extends AppCompatActivity {
     @BindView(R.id.btn_share)
     FloatingActionButton btn_share;
 
+    private String title;
+    private String description;
+    private String urlToImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
-        String title;
-        final String description;
-        String urlToImage;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras !=null){
                 title= extras.getString("Title");
-                getSupportActionBar().setTitle(title);
                 description= extras.getString("Description");
-                //txtDesc.setText(description);
                 urlToImage=extras.getString("Image");
-                Picasso.get().load(urlToImage).fit().into(imageView);
+
             }
         }
 
+        mPresenter= new NewsDetailsPresenter(mContext,this);
+        mPresenter.start();
+    }
+
+    @Override
+    public void initView() {
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+
+
+    }
+
+    @Override
+    public void renderView() {
+        getSupportActionBar().setTitle(title);
+        //txtDesc.setText(description);
+        Picasso.get().load(urlToImage).fit().into(imageView);
+
+    }
+
+    @Override
+    public void updateView() {
+
+    }
+
+    @Override
+    public void initListener() {
         btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +92,40 @@ public class NewsDetails extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    public void showEmptyState() {
+
+    }
+
+    @Override
+    public void hideEmptyState() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void hideKeyboard() {
+
+    }
+
+    @Override
+    public void showToastMessage(int resId) {
+
+    }
+
+    @Override
+    public void setPresenter(NewsDetailsContract.Presenter presenter) {
+        mPresenter=presenter;
     }
 }
