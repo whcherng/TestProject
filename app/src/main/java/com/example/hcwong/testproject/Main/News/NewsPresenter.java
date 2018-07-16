@@ -1,22 +1,31 @@
 package com.example.hcwong.testproject.Main.News;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.ProgressBar;
 
+import com.example.hcwong.testproject.Http.NewsService;
 import com.example.hcwong.testproject.Model.Article;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.Module;
+import dagger.Provides;
+
+
 public class NewsPresenter implements NewsContract.Presenter, NewsInteractor.NewsInteractorCallBack {
 
-    private final Context mContext;
+    private  Context mContext;
     private NewsContract.View mView;
-    private NewsInteractor mInteractor;
+    public NewsInteractor mInteractor;
 
-    public NewsPresenter(Context mContext, NewsContract.View mView) {
+    @Inject
+    public NewsPresenter(Context mContext, NewsContract.View mView, NewsService newsService) {
         this.mContext = mContext;
         this.mView = mView;
-        this.mInteractor=new NewsInteractor(mContext,this);
+        this.mInteractor=new NewsInteractor(newsService,this);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.example.hcwong.testproject.Main.News;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.hcwong.testproject.Http.NewsService;
 import com.example.hcwong.testproject.Http.WebService;
@@ -13,39 +12,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.Binds;
+import dagger.Module;
+import dagger.Provides;
 import retrofit2.Call;
 
+import static com.example.hcwong.testproject.DI.module.NewsRetrofit.API_KEY;
 
 public class NewsInteractor {
-    private Context mContext;
     private GetNewsTask getNewsTask;
     private NewsInteractorCallBack mCallBack;
+    private NewsService newsService;
 
-
-    public NewsInteractor(Context mContext, NewsInteractorCallBack mCallBack) {
-        this.mContext = mContext;
+    @Inject
+    public NewsInteractor( NewsService newsService,NewsInteractorCallBack mCallBack) {
+        this.newsService=newsService;
         this.mCallBack = mCallBack;
     }
-
-
-//
-//    public List<Article> getNews(){
-//
-//        NewsService service= WebService.retrofit.create(NewsService.class);
-//        Call<News> news=service.listNews("us",WebService.API_KEY);
-//        news.enqueue(new Callback<News>() {
-//            @Override
-//            public void onResponse(Call<News> call, Response<News> response) {
-//                List<Article> listOfArticles =response.body().getArticles();
-//
-//            }
-//            @Override
-//            public void onFailure(Call<News> call, Throwable t) {
-//                Log.e("Testing", t.toString());
-//            }
-//        });
-//
-//    }
 
     public interface NewsInteractorCallBack {
         void onReturnNews(List<Article> articleList);
@@ -63,8 +48,7 @@ public class NewsInteractor {
         @Override
         protected List<Article> doInBackground(Void... voids) {
             List<Article> articles=new ArrayList<>();
-            NewsService service= WebService.retrofit.create(NewsService.class);
-            Call<News> news=service.listNews("us",WebService.API_KEY);
+            Call<News> news=newsService.listNews("us",API_KEY);
             try {
                 articles=news.execute().body().getArticles();
             } catch (IOException e) {

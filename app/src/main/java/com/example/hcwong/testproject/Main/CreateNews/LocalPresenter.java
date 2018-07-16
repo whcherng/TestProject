@@ -7,12 +7,15 @@ import com.example.hcwong.testproject.Model.Article;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class LocalPresenter implements LocalContract.Presenter, LocalInteractor.NewsInteractorCallBack {
 
     private final Context mContext;
     private LocalContract.View mView;
     private LocalInteractor mInteractor;
 
+    @Inject
     public LocalPresenter(Context mContext, LocalContract.View mView) {
         this.mContext = mContext;
         this.mView = mView;

@@ -15,9 +15,12 @@ import android.widget.ProgressBar;
 import com.example.hcwong.testproject.Model.Article;
 import com.example.hcwong.testproject.R;
 import com.example.hcwong.testproject.shared.GeneralUtil;
+import com.example.hcwong.testproject.NewsApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +33,9 @@ import butterknife.ButterKnife;
  */
 public class NewsFragment extends Fragment implements NewsContract.View{
 
+    @Inject
+    NewsPresenter mPresenter;
     private Context mContext;
-    private NewsContract.Presenter mPresenter;
     private List<Article> listOfArticles;
     private NewsRecyclerViewAdapter adapter;
 
@@ -80,7 +84,8 @@ public class NewsFragment extends Fragment implements NewsContract.View{
         View view = inflater.inflate(R.layout.fragment_news_recycler, container, false);
         ButterKnife.bind(this, view);
 
-        mPresenter= new NewsPresenter(mContext,this);
+        //mPresenter= new NewsPresenter(mContext,this);
+        setupActivityComponent();
         mPresenter.start();
         return view;
     }
@@ -95,6 +100,14 @@ public class NewsFragment extends Fragment implements NewsContract.View{
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+    }
+
+    private void setupActivityComponent(){
+        NewsApplication.get(getContext())
+                .getAppComponent()
+                .addSub(new NewsModule(this))
+                .inject(this);
+
     }
 
     @Override
@@ -148,11 +161,6 @@ public class NewsFragment extends Fragment implements NewsContract.View{
     }
 
     @Override
-    public void startNewsActivity() {
-
-    }
-
-    @Override
     public void showLoading() {
         if(!progressLayout.isShown())
             progressLayout.setVisibility(View.VISIBLE);
@@ -188,7 +196,7 @@ public class NewsFragment extends Fragment implements NewsContract.View{
 
     @Override
     public void setPresenter(NewsContract.Presenter presenter) {
-        mPresenter=presenter;
+        mPresenter=(NewsPresenter)presenter;
     }
 
     /**

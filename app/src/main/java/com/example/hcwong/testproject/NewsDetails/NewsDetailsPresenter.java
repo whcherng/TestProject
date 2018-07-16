@@ -1,6 +1,8 @@
 package com.example.hcwong.testproject.NewsDetails;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 public class NewsDetailsPresenter implements NewsDetailsContract.Presenter {
 
@@ -17,6 +19,16 @@ public class NewsDetailsPresenter implements NewsDetailsContract.Presenter {
     @Override
     public void getNews() {
 
+    }
+
+    @Override
+    public void shareNews(String news) {
+        Log.d("sha",news);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Share News");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT,news );
+        mContext.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     @Override

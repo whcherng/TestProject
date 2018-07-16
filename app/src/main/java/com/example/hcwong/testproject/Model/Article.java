@@ -1,5 +1,6 @@
 package com.example.hcwong.testproject.Model;
 
+
 public class Article {
     private Source source;
     private String author;
@@ -8,7 +9,6 @@ public class Article {
     private String url;
     private String urlToImage;
     private String publishedAt;
-
 
     public Article() {
     }

@@ -17,7 +17,6 @@ public interface NewsContract {
         void showEmptyState();
         void hideEmptyState();
         void updateProgressBar(Integer pb);
-        void startNewsActivity();
 
         void setNewsList(List<Article> newsList);
         List<Article> getNewsList();
