@@ -12,9 +12,11 @@ public interface NewsDetailsContract {
         void showEmptyState();
         void hideEmptyState();
 
+
     }
 
     interface Presenter extends BasePresenter<NewsDetailsContract.View> {
         void getNews();
+        void shareNews(String news);
     }
 }

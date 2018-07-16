@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 
 public class NewsDetails extends AppCompatActivity implements NewsDetailsContract.View {
 
-    private Context mContext;
     private NewsDetailsContract.Presenter mPresenter;
     @BindView(R.id.imageView)
     ImageView imageView;
@@ -53,7 +52,7 @@ public class NewsDetails extends AppCompatActivity implements NewsDetailsContrac
             }
         }
 
-        mPresenter= new NewsDetailsPresenter(mContext,this);
+        mPresenter= new NewsDetailsPresenter(this,this);
         mPresenter.start();
     }
 
@@ -83,13 +82,8 @@ public class NewsDetails extends AppCompatActivity implements NewsDetailsContrac
         btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
                 String shareBody = txtDesc.getText().toString();
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share News");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody );
-                startActivity(Intent.createChooser(sharingIntent, "Share via"));
-
+                mPresenter.shareNews(shareBody);
             }
         });
     }

@@ -20,12 +20,15 @@ import android.widget.Toast;
 
 import com.example.hcwong.testproject.Model.Article;
 import com.example.hcwong.testproject.Model.Source;
+import com.example.hcwong.testproject.NewsApplication;
 import com.example.hcwong.testproject.R;
 import com.example.hcwong.testproject.shared.GeneralUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +42,8 @@ import butterknife.ButterKnife;
 public class LocalFragment extends Fragment implements LocalContract.View{
 
     private Context mContext;
-    private LocalContract.Presenter mPresenter;
+    @Inject
+    public LocalPresenter mPresenter;
     private List<Article> listOfArticles;
     private LocalRecyclerViewAdapter adapter;
 
@@ -58,6 +62,15 @@ public class LocalFragment extends Fragment implements LocalContract.View{
     @BindView(R.id.btn_save)
     Button btnSave;
 
+
+
+    private void setupActivityComponent(){
+        NewsApplication.get(mContext)
+                .getAppComponent()
+                .addSub(new LocalModule(this))
+                .inject(this);
+
+    }
 
 
 
@@ -97,8 +110,7 @@ public class LocalFragment extends Fragment implements LocalContract.View{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local_list, container, false);
         ButterKnife.bind(this, view);
-
-        mPresenter= new LocalPresenter(mContext,this);
+        setupActivityComponent();
         mPresenter.start();
         return view;
     }
@@ -220,7 +232,7 @@ public class LocalFragment extends Fragment implements LocalContract.View{
 
     @Override
     public void setPresenter(LocalContract.Presenter presenter) {
-        mPresenter=presenter;
+        mPresenter=(LocalPresenter) presenter;
     }
 
     /**
