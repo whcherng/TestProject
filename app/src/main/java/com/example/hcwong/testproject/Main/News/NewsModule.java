@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class NewsModule {
+public class NewsModule{
     private NewsContract.View view;
 
     public NewsModule(NewsContract.View view) {
@@ -18,5 +18,4 @@ public class NewsModule {
     public NewsContract.View provideView(){
         return view;
     }
-
 }

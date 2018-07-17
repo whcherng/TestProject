@@ -26,7 +26,7 @@ public class NewsInteractor {
     private NewsInteractorCallBack mCallBack;
     private NewsService newsService;
 
-    @Inject
+
     public NewsInteractor( NewsService newsService,NewsInteractorCallBack mCallBack) {
         this.newsService=newsService;
         this.mCallBack = mCallBack;

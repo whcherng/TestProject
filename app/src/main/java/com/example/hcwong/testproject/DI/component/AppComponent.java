@@ -16,7 +16,8 @@ import dagger.Component;
 @Component(modules ={AppModule.class,
         RetrofitModule.class,
         NewsServiceModule.class})
-public interface AppComponent {
+public interface AppComponent{
     NewsComponent addSub(NewsModule newsModule);
     LocalComponent addSub(LocalModule localModule);
+
 }

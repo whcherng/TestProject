@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 public class LocalPresenter implements LocalContract.Presenter, LocalInteractor.NewsInteractorCallBack {
 
-    private final Context mContext;
+    private Context mContext;
     private LocalContract.View mView;
     private LocalInteractor mInteractor;
 

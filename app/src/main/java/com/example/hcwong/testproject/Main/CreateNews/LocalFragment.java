@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.hcwong.testproject.Base.BaseMvpFragment;
+import com.example.hcwong.testproject.DI.component.AppComponent;
+import com.example.hcwong.testproject.Main.News.NewsModule;
 import com.example.hcwong.testproject.Model.Article;
 import com.example.hcwong.testproject.Model.Source;
 import com.example.hcwong.testproject.NewsApplication;
@@ -39,11 +42,9 @@ import butterknife.ButterKnife;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class LocalFragment extends Fragment implements LocalContract.View{
+public class LocalFragment extends BaseMvpFragment<LocalPresenter> implements LocalContract.View{
 
     private Context mContext;
-    @Inject
-    public LocalPresenter mPresenter;
     private List<Article> listOfArticles;
     private LocalRecyclerViewAdapter adapter;
 
@@ -61,18 +62,6 @@ public class LocalFragment extends Fragment implements LocalContract.View{
     CheckBox saveAuthor;
     @BindView(R.id.btn_save)
     Button btnSave;
-
-
-
-    private void setupActivityComponent(){
-        NewsApplication.get(mContext)
-                .getAppComponent()
-                .addSub(new LocalModule(this))
-                .inject(this);
-
-    }
-
-
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -110,9 +99,17 @@ public class LocalFragment extends Fragment implements LocalContract.View{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local_list, container, false);
         ButterKnife.bind(this, view);
-        setupActivityComponent();
-        mPresenter.start();
+        initInject(NewsApplication.get(getContext())
+                .getAppComponent());
+        mvpPresenter.start();
         return view;
+    }
+
+    @Override
+    protected void initInject(AppComponent appComponent) {
+        appComponent.addSub(new LocalModule(this))
+                .inject(this);
+
     }
 
     @Override
@@ -177,7 +174,7 @@ public class LocalFragment extends Fragment implements LocalContract.View{
                         tempArticle.setAuthor("James Ray");
                     if (radioYes.isChecked())
                         tempArticle.setPublishedAt(GeneralUtil.simpleDateToDateFormatString(Calendar.getInstance()));
-                    mPresenter.saveArticles(tempArticle);
+                    mvpPresenter.saveArticles(tempArticle);
                     updateView();
                 }
             }
@@ -232,7 +229,7 @@ public class LocalFragment extends Fragment implements LocalContract.View{
 
     @Override
     public void setPresenter(LocalContract.Presenter presenter) {
-        mPresenter=(LocalPresenter) presenter;
+        mvpPresenter= (LocalPresenter) presenter;
     }
 
     /**

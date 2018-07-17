@@ -11,9 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.Module;
 import dagger.Provides;
-
 
 public class NewsPresenter implements NewsContract.Presenter, NewsInteractor.NewsInteractorCallBack {
 
@@ -25,7 +23,7 @@ public class NewsPresenter implements NewsContract.Presenter, NewsInteractor.New
     public NewsPresenter(Context mContext, NewsContract.View mView, NewsService newsService) {
         this.mContext = mContext;
         this.mView = mView;
-        this.mInteractor=new NewsInteractor(newsService,this);
+        this.mInteractor = new NewsInteractor(newsService,this);
     }
 
     @Override
