@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.example.hcwong.testproject.Base.BaseMvpFragment;
+import com.example.hcwong.testproject.DI.component.AppComponent;
 import com.example.hcwong.testproject.Model.Article;
 import com.example.hcwong.testproject.R;
 import com.example.hcwong.testproject.shared.GeneralUtil;
@@ -31,10 +33,8 @@ import butterknife.ButterKnife;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class NewsFragment extends Fragment implements NewsContract.View{
+public class NewsFragment extends BaseMvpFragment<NewsPresenter> implements NewsContract.View{
 
-    @Inject
-    NewsPresenter mPresenter;
     private Context mContext;
     private List<Article> listOfArticles;
     private NewsRecyclerViewAdapter adapter;
@@ -83,31 +83,28 @@ public class NewsFragment extends Fragment implements NewsContract.View{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_recycler, container, false);
         ButterKnife.bind(this, view);
-
-        //mPresenter= new NewsPresenter(mContext,this);
-        setupActivityComponent();
-        mPresenter.start();
+        initInject(NewsApplication.get(getContext())
+                .getAppComponent());
+        mvpPresenter.start();
         return view;
+    }
+
+    @Override
+    protected void initInject(AppComponent appComponent) {
+        appComponent.addSub(new NewsModule(this))
+                .inject(this);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext=context;
+        mContext = context;
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-    }
-
-    private void setupActivityComponent(){
-        NewsApplication.get(getContext())
-                .getAppComponent()
-                .addSub(new NewsModule(this))
-                .inject(this);
-
     }
 
     @Override
@@ -196,7 +193,7 @@ public class NewsFragment extends Fragment implements NewsContract.View{
 
     @Override
     public void setPresenter(NewsContract.Presenter presenter) {
-        mPresenter=(NewsPresenter)presenter;
+        mvpPresenter=(NewsPresenter) presenter;
     }
 
     /**
